@@ -17,14 +17,10 @@ db = SQLAlchemy(app)
 def create_tables():
     db.create_all()
 
-def get_urls():
-    log.append("[FRONTEND] Getting urls ")
-    return requests.request("GET", url).json()
-
 def shorten_url():
     letters = string.ascii_lowercase + string.ascii_uppercase
     while True:
-        rand_letters = random.choices(letters, k=3)
+        rand_letters = random.choices(letters, k=6)
         rand_letters = "".join(rand_letters)
         short_url = Urls.query.filter_by(short=rand_letters).first()
         if not short_url:
