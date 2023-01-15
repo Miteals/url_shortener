@@ -1,20 +1,45 @@
-{% block content %}
-    <h1>{% block title %} Welcome to FlaskShortener {% endblock %}</h1>
-    <form method="post">
-    <div class="form-group">
-        <label for="url">URL</label>
-        <input type="text" name="url"
-               placeholder="URL to shorten" class="form-control"
-               value="{{ request.form['url'] }}" autofocus></input>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" />
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mdc-typography--headline1">URL Shortener</h1>
+      <form action="url" method="POST" class="form-group">
+        <div class="mdc-text-field">
+          <input type="text" id="url" name="url" class="mdc-text-field__input" required>
+          <label class="mdc-floating-label" for="url">Enter a URL to shorten</label>
+          <div class="mdc-line-ripple"></div>
+        </div>
+        <button type="submit" class="mdc-button mdc-button--raised">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Shorten</span>
+        </button>
+      </form>
+      {% if short_url %}
+        <hr>
+        <div class="text-center">
+          <a href="{{ short_url }}" class="shortened-url">{{ short_url }}</a>
+        </div>
+      {% endif %}
     </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-    </form>
-
-    {% if short_url %}
-    <hr>
-    <span>{{ short_url }}</span>
-    {% endif %}
-{% endblock %}
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+      mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field'));
+      mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+    </script>
+  </body>
+</html>
