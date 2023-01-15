@@ -14,19 +14,15 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Original URL</th>
             <th>Shortened URL</th>
-            <th>Date Created</th>
           </tr>
         </thead>
         <tbody>
             <tr>
-              <td>{{ url_received }}</td>
               <div class="short-url-box">
                 <td><a href="http://localhost:7778/{{short_url_display}}" class="short-url">http://localhost:7778/{{short_url_display}}</a></td>
               </div>
               <a href="{{url_for('index')}}" class="btn btn-primary mt-3">Back to Home</a>
-              <td>{{ linkdate_created }}</td>
             </tr>
         </tbody>
       </table>
