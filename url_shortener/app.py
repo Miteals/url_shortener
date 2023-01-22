@@ -4,7 +4,9 @@ import requests
 import string
 import random
 import os
-import datetime
+from datetime import datetime, timedelta
+from flask import jsonify
+
 
 app = Flask(__name__)
 
@@ -17,6 +19,36 @@ db = SQLAlchemy(app)
 @app.before_first_request
 def create_tables():
     db.create_all()
+
+
+class MyModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    ttl = db.Column(db.Integer, default=60)
+    expiration_date = db.Column(db.DateTime)
+
+
+my_model = MyModel(name='example', ttl=60)
+db.session.add(my_model)
+db.session.commit()
+
+my_model = MyModel(name='example', ttl=60)
+my_model.expiration_date = datetime.now() + timedelta(days=my_model.ttl)
+db.session.add(my_model)
+db.session.commit()
+
+def retrieve_url(short_url):
+    # retrieve the record from the database using the short_url
+    url_record = MyModel.query.filter_by(short_url=short_url).first()
+    if url_record is not None:
+        if url_record.expiration_date > datetime.now():
+            return jsonify({'url': url_record.long_url})
+        else:
+            db.session.delete(url_record)
+            db.session.commit()
+            return jsonify({'error': 'URL expired'}), 404
+    else:
+        return jsonify({'error': 'URL not found'}), 404
 
 def shorten_url():
     letters = string.ascii_lowercase + string.ascii_uppercase
