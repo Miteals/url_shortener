@@ -29,13 +29,10 @@ class MyModel(db.Model):
 
 
 my_model = MyModel(name='example', ttl=60)
-db.session.add(my_model)
-db.session.commit()
-
-my_model = MyModel(name='example', ttl=60)
 my_model.expiration_date = datetime.now() + timedelta(days=my_model.ttl)
 db.session.add(my_model)
 db.session.commit()
+
 
 def retrieve_url(short_url):
     # retrieve the record from the database using the short_url
